@@ -11,8 +11,7 @@ namespace DataAccessLayer.Context
 {
     public class ApplicationDbContext() : DbContext //IdentityDbContext<User, IdentityRole<long>, long>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> op) : base(op)
         {
 
         }
