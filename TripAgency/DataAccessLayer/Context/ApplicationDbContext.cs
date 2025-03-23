@@ -9,12 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Context
 {
-    public class ApplicationDbContext() : DbContext //IdentityDbContext<User, IdentityRole<long>, long>
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options) //IdentityDbContext<User, IdentityRole<long>, long>(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> op) : base(op)
-        {
 
-        }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<PaymentTransaction> PaymentTransactions { get; set; }
