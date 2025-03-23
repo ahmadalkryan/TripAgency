@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Context
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> op) : DbContext(op)
+    public class ApplicationDbContext() : DbContext //IdentityDbContext<User, IdentityRole<long>, long>
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+
+        }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<PaymentTransaction> PaymentTransactions { get; set; }
