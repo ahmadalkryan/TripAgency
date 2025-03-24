@@ -7,7 +7,7 @@ namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
     public partial class AddCustomerAndContacts : Migration
-    {
+    {        
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {

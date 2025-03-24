@@ -21,7 +21,7 @@ namespace DataAccessLayer.Entities
         public int Views { get; set; }
         public PostStatusEnum Status { get; set; }
         public DateTime PublishDate { get; set; }
-        public string summary { get; set; } = string.Empty;
+        public string Summary { get; set; } = string.Empty;
 
         public int AutherId { get; set; }
         public Employee? Auther { get; set; }
