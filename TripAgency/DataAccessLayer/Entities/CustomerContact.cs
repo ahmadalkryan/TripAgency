@@ -1,5 +1,4 @@
 ﻿using DataAccessLayer.Entities.Common;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Entities
 {
-    public partial class User : /*BaseEntity*/IdentityUser<long>
+    public class CustomerContact : BaseEntity
     {
-        public string Password { get; set; } = string.Empty;
-       // public Employee? Employee { get; set; }
+        public long CustomerId { get; set; }
+        public int ContactTypeId { get; set; }
+        public string Value { get; set; } = string.Empty;
         public Customer? Customer { get; set; }
+        public ContactType? ContactType { get; set; }
     }
 }

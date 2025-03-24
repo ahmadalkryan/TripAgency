@@ -11,13 +11,23 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-                )
-            );
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    );
 
-//builder.Services.AddIdentity<User, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>() // Link Identity to your DbContext
-//    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole<long>>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 var app = builder.Build();
 

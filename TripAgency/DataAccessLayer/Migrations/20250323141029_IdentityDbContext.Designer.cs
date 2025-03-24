@@ -4,6 +4,7 @@ using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250323141029_IdentityDbContext")]
+    partial class IdentityDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +49,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 3, 24, 7, 19, 57, 643, DateTimeKind.Local).AddTicks(9185))
+                        .HasDefaultValue(new DateTime(2025, 3, 23, 17, 10, 28, 926, DateTimeKind.Local).AddTicks(9186))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
@@ -168,89 +171,6 @@ namespace DataAccessLayer.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.ContactType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Type")
-                        .IsUnique();
-
-                    b.ToTable("ContactTypes", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.Customer", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("country");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("last_name");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Customers", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.CustomerContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ContactTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("contact_type_id");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(10)")
-                        .HasColumnName("country");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactTypeId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CustomerContacts", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.ImageShot", b =>
@@ -619,6 +539,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -852,36 +780,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.Customer", b =>
-                {
-                    b.HasOne("DataAccessLayer.Entities.User", "User")
-                        .WithOne("Customer")
-                        .HasForeignKey("DataAccessLayer.Entities.Customer", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.CustomerContact", b =>
-                {
-                    b.HasOne("DataAccessLayer.Entities.ContactType", "ContactType")
-                        .WithMany("Contacts")
-                        .HasForeignKey("ContactTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLayer.Entities.Customer", "Customer")
-                        .WithMany("Contacts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ContactType");
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.ImageShot", b =>
                 {
                     b.HasOne("DataAccessLayer.Entities.CarBooking", "CarBooking")
@@ -1063,16 +961,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Cars");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.ContactType", b =>
-                {
-                    b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.Customer", b =>
-                {
-                    b.Navigation("Contacts");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.Payment", b =>
                 {
                     b.Navigation("PaymentTransactions");
@@ -1098,11 +986,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("TripBookings");
 
                     b.Navigation("TripPlanCars");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.User", b =>
-                {
-                    b.Navigation("Customer");
                 });
 #pragma warning restore 612, 618
         }
