@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.Marshalling;
+using DataAccessLayer.Enum;
 
 namespace DataAccessLayer.Context
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : /*DbContext(options)*/ IdentityDbContext<User, IdentityRole<long>, long>(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)// IdentityDbContext<User, IdentityRole<long>, long>(options)
     {
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
@@ -27,16 +28,11 @@ namespace DataAccessLayer.Context
         public virtual DbSet<TripPlan> TripPlans { get; set; }
         public virtual DbSet<TripPlanCar> TripPlanCars { get; set; }
         public virtual DbSet<Trip> Trips { get; set; }
-        public override DbSet<User> Users {  get; set; }
 
-        public virtual ICollection<IdentityUserClaim<long>> Claims { get; set; } = null!;
-        public virtual ICollection<IdentityUserLogin<long>> Logins { get; set; } = null!;
-        public virtual ICollection<IdentityUserToken<long>> Tokens { get; set; } = null!;
-        public virtual ICollection<IdentityRole<long>> AspNetRoles { get; set; } = null!;
 
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<ContactType> ContactTypes { get; set; }
-        public virtual DbSet<CustomerContact> CustomersContacts { get; set; }
+        //public virtual DbSet<Customer> Customers { get; set; }
+        //public virtual DbSet<ContactType> ContactTypes { get; set; }
+        //public virtual DbSet<CustomerContact> CustomersContacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -167,7 +163,7 @@ namespace DataAccessLayer.Context
                     .WithMany(p => p.PaymentTransactions)
                     .HasForeignKey(pt => pt.PaymentId);
 
-                    t.HasIndex(t => new { t.PaymentId, t.PaymentMethodId })
+                    t.HasIndex(t => new { t.PaymentId, t.PaymentMethodId, t.TransactionDate })
                     .IsUnique();
 
                     t.Property(pt => pt.Id)
@@ -312,6 +308,7 @@ namespace DataAccessLayer.Context
                 .HasConversion<string>()
                 .HasColumnType("nvarchar(10)")
                 .HasColumnName("status")
+                .HasDefaultValue(CarStatusEnum.Available)
                 .IsRequired();
             });
             #endregion
@@ -547,70 +544,6 @@ namespace DataAccessLayer.Context
             });
             #endregion
 
-            #region IdentityDbContext 
-            modelBuilder.Entity<User>(b =>
-            {
-                b.ToTable("Users");
-                b.HasKey(p => p.Id);
-                b.HasIndex(u => u.NormalizedUserName).HasDatabaseName("UQ_AspNetUsers_UserName").IsUnique();
-                b.HasIndex(u => u.NormalizedEmail).HasDatabaseName("UQ_AspNetUsers_Email").IsUnique();
-                b.HasIndex(u => u.PhoneNumber).HasDatabaseName("UQ_AspNetUsers_Phone").IsUnique();
-                b.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
-
-                b.HasMany<IdentityUserClaim<long>>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired().HasConstraintName("FK_AspNetUserClaims_AspNetUsers_UserId");
-                b.HasMany<IdentityUserRole<long>>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired().HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId");
-                b.HasMany<IdentityUserToken<long>>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired().HasConstraintName("FK_AspNetUserTokens_AspNetUsers_UserId");
-                b.HasMany<IdentityUserLogin<long>>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired().HasConstraintName("FK_AspNetUserLogins_AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<IdentityUserClaim<long>>(b =>
-            {
-                b.ToTable("UserClaims");
-                b.HasKey(p => p.Id);
-                b.HasIndex(p => p.UserId).HasDatabaseName("IX_AspNetUserClaims_UserId");
-            });
-
-            modelBuilder.Entity<IdentityUserLogin<long>>(b =>
-            {
-                b.ToTable("UserLogins");
-                b.HasKey(p => new { p.UserId, p.LoginProvider, p.ProviderKey });
-                b.HasIndex(p => p.UserId).HasDatabaseName("IX_AspNetUserLogins_UserId");
-            });
-
-            modelBuilder.Entity<IdentityUserToken<long>>(b =>
-            {
-                b.ToTable("UserTokens");
-                b.HasKey(p => new { p.UserId, p.LoginProvider, p.Name });
-                b.HasIndex(p => p.UserId).HasDatabaseName("IX_AspNetUserTokens_UserId");
-            });
-
-            modelBuilder.Entity<IdentityRole<long>>(b =>
-            {
-                b.ToTable("Roles");
-                b.HasKey(p => p.Id);
-                b.HasAlternateKey(r => r.NormalizedName).HasName("UQ_AspNetRoles_Name");
-                b.Property(r => r.ConcurrencyStamp).IsConcurrencyToken();
-
-                b.HasMany<IdentityUserRole<long>>().WithOne().HasForeignKey(us => us.RoleId).IsRequired().HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId");
-                b.HasMany<IdentityRoleClaim<long>>().WithOne().HasForeignKey(uc => uc.RoleId).IsRequired().HasConstraintName("FK_AspNetRoleClaims_AspNetRoles_RoleId");
-            });
-
-            modelBuilder.Entity<IdentityUserRole<long>>(b =>
-            {
-                b.ToTable("UserRoles");
-                b.HasKey(p => new { p.UserId, p.RoleId });
-                b.HasIndex(p => p.UserId).HasDatabaseName("IX_AspNetUserRoles_UserId");
-                b.HasIndex(p => p.RoleId).HasDatabaseName("IX_AspNetUserRoles_RoleId");
-            });
-
-            modelBuilder.Entity<IdentityRoleClaim<long>>(b =>
-            {
-                b.ToTable("RoleClaims");
-                b.HasKey(p => p.Id);
-                b.HasIndex(p => p.RoleId).HasDatabaseName("IX_AspNetsRoleClaim_RoleId");
-            });
-            #endregion
-
             #region Contacts
             modelBuilder.Entity<ContactType>(c =>
             {
@@ -631,7 +564,7 @@ namespace DataAccessLayer.Context
                 .IsUnique();
             });
             #endregion
-            
+
             #region Customer
             modelBuilder.Entity<Customer>(c =>
             {
@@ -641,10 +574,6 @@ namespace DataAccessLayer.Context
                 c.Property(c => c.UserId)
                 .ValueGeneratedNever()
                 .HasColumnName("user_id");
-
-                c.HasOne(cb => cb.User)
-                .WithOne(b => b.Customer)
-                .HasForeignKey<Customer>(cb => cb.UserId);
 
                 c.Property(c => c.FirstName)
                 .HasColumnName("first_name")
@@ -698,7 +627,7 @@ namespace DataAccessLayer.Context
 
             #region Employee
 
-             
+
             #endregion
         }
     }

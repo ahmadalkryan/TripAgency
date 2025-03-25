@@ -12,6 +12,6 @@ namespace DataAccessLayer.Entities
     {
         public string Password { get; set; } = string.Empty;
        // public Employee? Employee { get; set; }
-        public Customer? Customer { get; set; }
+        //public Customer? Customer { get; set; }
     }
 }

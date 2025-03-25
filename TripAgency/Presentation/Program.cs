@@ -3,6 +3,7 @@ using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,20 +15,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
-builder.Services.AddIdentity<User, IdentityRole<long>>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
-    options.Lockout.AllowedForNewUsers = true;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Password.RequiredLength = 6;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireDigit = true;
-    options.Password.RequireNonAlphanumeric = true;
-})
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+builder.Services.AddDbContext<Identity>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"))
+    );
+
+//builder.Services.AddIdentity<User, IdentityRole<long>>(options =>
+//{
+//    options.SignIn.RequireConfirmedAccount = true;
+//    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier;
+//    options.Lockout.AllowedForNewUsers = true;
+//    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+//    options.Lockout.MaxFailedAccessAttempts = 5;
+//    options.Password.RequiredLength = 6;
+//    options.Password.RequireNonAlphanumeric = false;
+//    options.Password.RequireDigit = true;
+//    options.Password.RequireNonAlphanumeric = true;
+//})
+//.AddEntityFrameworkStores<Identity>()
+//.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 var app = builder.Build();
 

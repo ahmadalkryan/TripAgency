@@ -6,28 +6,33 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCustomerAndContacts : Migration
-    {        
+    public partial class AddCustomer : Migration
+    {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FirstName",
-                table: "Users");
+            migrationBuilder.DropIndex(
+                name: "IX_PaymentTransactions_paymentId_paymentMethodId",
+                table: "PaymentTransactions");
 
-            migrationBuilder.DropColumn(
-                name: "LastName",
-                table: "Users");
+            migrationBuilder.AlterColumn<string>(
+                name: "status",
+                table: "Cars",
+                type: "nvarchar(10)",
+                nullable: false,
+                defaultValue: "Available",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(10)");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "start_date_time",
                 table: "Bookings",
                 type: "datetime2(7)",
                 nullable: false,
-                defaultValue: new DateTime(2025, 3, 24, 7, 19, 57, 643, DateTimeKind.Local).AddTicks(9185),
+                defaultValue: new DateTime(2025, 3, 25, 14, 33, 57, 512, DateTimeKind.Local).AddTicks(4895),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2(7)",
-                oldDefaultValue: new DateTime(2025, 3, 23, 17, 10, 28, 926, DateTimeKind.Local).AddTicks(9186));
+                oldDefaultValue: new DateTime(2025, 3, 23, 14, 17, 58, 802, DateTimeKind.Local).AddTicks(7062));
 
             migrationBuilder.CreateTable(
                 name: "ContactTypes",
@@ -43,6 +48,33 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
@@ -55,9 +87,9 @@ namespace DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Customers", x => x.user_id);
                     table.ForeignKey(
-                        name: "FK_Customers_Users_user_id",
+                        name: "FK_Customers_User_user_id",
                         column: x => x.user_id,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -90,6 +122,12 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PaymentTransactions_paymentId_paymentMethodId_transactionDate",
+                table: "PaymentTransactions",
+                columns: new[] { "paymentId", "paymentMethodId", "transactionDate" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ContactTypes_type",
                 table: "ContactTypes",
                 column: "type",
@@ -118,29 +156,37 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.DropTable(
                 name: "Customers");
 
-            migrationBuilder.AddColumn<string>(
-                name: "FirstName",
-                table: "Users",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.DropTable(
+                name: "User");
 
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
-                table: "Users",
-                type: "nvarchar(max)",
+            migrationBuilder.DropIndex(
+                name: "IX_PaymentTransactions_paymentId_paymentMethodId_transactionDate",
+                table: "PaymentTransactions");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "status",
+                table: "Cars",
+                type: "nvarchar(10)",
                 nullable: false,
-                defaultValue: "");
+                oldClrType: typeof(string),
+                oldType: "nvarchar(10)",
+                oldDefaultValue: "Available");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "start_date_time",
                 table: "Bookings",
                 type: "datetime2(7)",
                 nullable: false,
-                defaultValue: new DateTime(2025, 3, 23, 17, 10, 28, 926, DateTimeKind.Local).AddTicks(9186),
+                defaultValue: new DateTime(2025, 3, 23, 14, 17, 58, 802, DateTimeKind.Local).AddTicks(7062),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2(7)",
-                oldDefaultValue: new DateTime(2025, 3, 24, 7, 19, 57, 643, DateTimeKind.Local).AddTicks(9185));
+                oldDefaultValue: new DateTime(2025, 3, 25, 14, 33, 57, 512, DateTimeKind.Local).AddTicks(4895));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentTransactions_paymentId_paymentMethodId",
+                table: "PaymentTransactions",
+                columns: new[] { "paymentId", "paymentMethodId" },
+                unique: true);
         }
     }
 }

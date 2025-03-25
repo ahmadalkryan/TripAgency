@@ -18,7 +18,7 @@ namespace DataAccessLayer.Entities
         public string Country { get; set; } = string.Empty;
 
 
-        public User? User { get; set; }
+        //public User? User { get; set; }
         public virtual ICollection<CustomerContact> Contacts { get; set; }
         //public virtual ICollection<Booking> Bookings { get; set; }
     }
