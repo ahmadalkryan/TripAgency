@@ -9,6 +9,11 @@ namespace DataAccessLayer.Entities
 {
     public class Tag : BaseEntity
     {
-        public string Name { get; set; } = string.Empty;
+        public Tag()
+        {
+            PostTags = new HashSet<PostTag>();
+        }
+        public string? Name { get; set; }
+        public virtual ICollection<PostTag> PostTags { get; set; }
     }
 }

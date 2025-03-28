@@ -10,11 +10,12 @@ namespace DataAccessLayer.Entities
     {
         public Employee()
         {
-           // Posts = new HashSet<Post>();
+           Posts = new HashSet<Post>();
+           Bookings = new HashSet<Booking>();
         }
         public DateTime HireDate { get; set; }
-        public int UserId { get; set; }
-        public User? User { get; set; }
-        //public ICollection<Post> Posts { get; set; }
+        public long UserId { get; set; }
+        public virtual ICollection<Booking> Bookings { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

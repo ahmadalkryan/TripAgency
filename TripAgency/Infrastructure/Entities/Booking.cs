@@ -14,20 +14,21 @@ namespace DataAccessLayer.Entities
         {
             Payments = new HashSet<Payment>();
         }
-        //public int CustomerId { get; set; }
-        public string BookingType { get; set; } = string.Empty;
+        public long CustomerId { get; set; }
+        public long Employeeid { get; set; }
+
+        public string? BookingType { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public BookingStatusEnum Status { get; set; }
-        //public int Employeeid { get; set; }
         public int NumOfPassengers { get; set; }
         
         public virtual CarBooking? CarBooking { get; set; }
         public virtual TripBooking? TripBooking { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
 
-        //public Customer? Customer { get; set; } 
-        //public Employee Employee { get; set; }
+        public Customer? Customer { get; set; } 
+        public Employee? Employee { get; set; }
 
     }
 }

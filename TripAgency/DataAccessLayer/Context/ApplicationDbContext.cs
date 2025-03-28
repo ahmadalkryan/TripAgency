@@ -14,6 +14,8 @@ namespace DataAccessLayer.Context
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)// IdentityDbContext<User, IdentityRole<long>, long>(options)
     {
+
+        #region Tables
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<PaymentTransaction> PaymentTransactions { get; set; }
@@ -28,11 +30,14 @@ namespace DataAccessLayer.Context
         public virtual DbSet<TripPlan> TripPlans { get; set; }
         public virtual DbSet<TripPlanCar> TripPlanCars { get; set; }
         public virtual DbSet<Trip> Trips { get; set; }
-
-
-        //public virtual DbSet<Customer> Customers { get; set; }
-        //public virtual DbSet<ContactType> ContactTypes { get; set; }
-        //public virtual DbSet<CustomerContact> CustomersContacts { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<ContactType> ContactTypes { get; set; }
+        public virtual DbSet<CustomerContact> CustomersContacts { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<PostTag> PostTags { get; set; }
+        public virtual DbSet<PostType> PostTypes { get; set; }
+        public virtual DbSet<SEOMetaData> SEOMetaDatas { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +52,20 @@ namespace DataAccessLayer.Context
                 b.Property(b => b.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
+
+                b.HasOne(c => c.Customer)
+                .WithMany(b => b.Bookings)
+                .HasForeignKey(c => c.CustomerId);
+
+                b.HasOne(c => c.Employee)
+                .WithMany(b => b.Bookings)
+                .HasForeignKey(c => c.Employeeid);
+
+                b.Property(b => b.CustomerId)
+                .HasColumnName("customer_id");
+
+                b.Property(b => b.Employeeid)
+                .HasColumnName("employee_id");
 
                 b.Property(b => b.StartDateTime)
                 .HasColumnName("start_date_time")
@@ -278,7 +297,7 @@ namespace DataAccessLayer.Context
                 .HasColumnType("nvarchar(10)")
                 .IsRequired();
 
-                c.Property(c => c.Ppd)
+                c.Property(c => c.Pph)
                 .HasColumnName("pph")
                 .HasColumnType("decimal(12,2)")
                 .IsRequired();
@@ -626,8 +645,169 @@ namespace DataAccessLayer.Context
             #endregion
 
             #region Employee
+            modelBuilder.Entity<Employee>(e => 
+            {
+                e.ToTable("Employees")
+                .HasKey(e => e.UserId);
 
+                e.Property(e => e.UserId)
+                .ValueGeneratedNever()
+                .HasColumnName("user_id");
 
+                e.Property(e => e.HireDate)
+                .HasColumnType("datetime2(7)")
+                .HasColumnName("hier_date")
+                .IsRequired();
+            });
+
+            #endregion
+
+            #region Post
+            modelBuilder.Entity<PostTag>(p => 
+            {
+                p.ToTable("PostTags")
+                .HasKey(t => new {t.PostId, t.TagId});
+
+                p.HasOne(p => p.Tag)
+                .WithMany(t => t.PostTags)
+                .HasForeignKey(t => t.TagId);
+
+                p.HasOne(p => p.Post)
+                .WithMany(t => t.Tags)
+                .HasForeignKey(t => t.PostId);
+
+                p.Property(t => t.PostId)
+                .HasColumnName("post_id");
+
+                p.Property(p => p.TagId)
+                .HasColumnName("tag_id");
+            });
+
+            modelBuilder.Entity<Post>(p =>
+            {
+                p.ToTable("Posts")
+                .HasKey(p => p.Id);
+
+                p.Property(p => p.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+
+                p.HasOne(p => p.PostType)
+                .WithMany(pt => pt.Posts)
+                .HasForeignKey(p => p.PostTypeId);
+
+                p.HasOne(p => p.Author)
+                .WithMany(a => a.Posts)
+                .HasForeignKey(p => p.AuthorId);                
+
+                p.Property(p => p.AuthorId)
+                .HasColumnName("author_id");
+
+                p.Property(p => p.PostTypeId)
+               .HasColumnName("post_type_id");
+
+                p.Property(p => p.Title)
+                .HasColumnName("title")
+                .HasColumnType("nvarchar(100)")
+                .HasMaxLength(100)
+                .IsRequired();
+
+                p.Property(p => p.Body)
+                .HasColumnName("body")
+                .HasColumnType("nvarchar(256)")
+                .IsRequired();
+
+                p.Property(p => p.Slug)
+                .HasColumnName("slug")
+                .HasColumnType("nvarchar(256)")
+                .IsRequired();
+
+                p.Property(p => p.Image)
+                .HasColumnName("image")
+                .HasColumnType("nvarchar(256)")
+                .IsRequired();
+
+                p.Property(p => p.Summary)
+                .HasColumnName("sammary")
+                .HasColumnType("nvarchar(max)");
+
+                p.Property(p => p.Views)
+                .HasColumnName("views")
+                .HasDefaultValue(0);
+
+                p.Property(p => p.Status)
+                .HasColumnName("status")
+                .HasConversion<string>()
+                .HasColumnType("nvarchar(100)")
+                .IsRequired();
+
+                p.Property(p => p.PublishDate)
+                .HasColumnName("publish_date")
+                .HasColumnType("datetime2(7)")
+                .HasDefaultValue(DateTime.Now)
+                .IsRequired();
+            });
+            #endregion
+
+            #region PostType
+            modelBuilder.Entity<PostType>(p =>
+            {
+                p.ToTable("PostTypes")
+                .HasKey(p => p.Id);
+
+                p.Property(p => p.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
+                p.Property(p => p.Description)
+                .HasColumnType("nvarchar(256)")
+                .HasColumnName("description")
+                .HasDefaultValue("");
+
+                p.Property(p => p.Title)
+                .HasColumnType("nvarchar(50)")
+                .HasColumnName("title")
+                .IsRequired();
+            });
+            #endregion
+
+            #region SEO
+            modelBuilder.Entity<SEOMetaData>(p =>
+            {
+                p.ToTable("SEOMetaDatas")
+                .HasKey(p => p.Id);
+
+                p.Property(p => p.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
+                p.HasOne(p => p.Post)
+                .WithMany(p => p.MetaDatas)
+                .HasForeignKey(p => p.PostId);
+
+                p.Property(p => p.PostId)
+                .HasColumnName("post_id");
+
+                p.Property(p => p.Description)
+                .HasColumnType("nvarchar(256)")
+                .HasColumnName("description")
+                .HasDefaultValue("");
+
+                p.Property(p => p.Title)
+                .HasColumnType("nvarchar(50)")
+                .HasColumnName("title")
+                .IsRequired();
+
+                p.Property(p => p.UrlSlug)
+                .HasColumnType("nvarchar(256)")
+                .HasColumnName("url_slug")
+                .IsRequired();
+
+                p.Property(p => p.KeyWords)
+                .HasColumnType("nvarchar(256)")
+                .HasColumnName("keywords")
+                .IsRequired();
+            });
             #endregion
         }
     }

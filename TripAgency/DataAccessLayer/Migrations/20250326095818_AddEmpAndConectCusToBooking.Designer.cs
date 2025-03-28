@@ -4,6 +4,7 @@ using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326095818_AddEmpAndConectCusToBooking")]
+    partial class AddEmpAndConectCusToBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,7 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BookingType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("CustomerId")
@@ -53,7 +57,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 13, 48, 67, DateTimeKind.Local).AddTicks(8536))
+                        .HasDefaultValue(new DateTime(2025, 3, 26, 12, 58, 17, 671, DateTimeKind.Local).AddTicks(9931))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
@@ -118,8 +122,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnName("price_per_day");
 
                     b.Property<decimal>("Pph")
-                        .HasColumnType("decimal(12,2)")
-                        .HasColumnName("pph");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -423,116 +426,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("PaymentTransactions", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.Post", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<long>("AuthorId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("author_id");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("body");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("image");
-
-                    b.Property<int>("PostTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("post_type_id");
-
-                    b.Property<DateTime>("PublishDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 13, 48, 74, DateTimeKind.Local).AddTicks(1433))
-                        .HasColumnName("publish_date");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("slug");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("status");
-
-                    b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("sammary");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("title");
-
-                    b.Property<long>("Views")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L)
-                        .HasColumnName("views");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("PostTypeId");
-
-                    b.ToTable("Posts", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.PostTag", b =>
-                {
-                    b.Property<int>("PostId")
-                        .HasColumnType("int")
-                        .HasColumnName("post_id");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int")
-                        .HasColumnName("tag_id");
-
-                    b.HasKey("PostId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("PostTags", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.PostType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(256)")
-                        .HasDefaultValue("")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PostTypes", (string)null);
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.Region", b =>
                 {
                     b.Property<int>("Id")
@@ -554,47 +447,6 @@ namespace DataAccessLayer.Migrations
                         .IsUnique();
 
                     b.ToTable("Regions", (string)null);
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.SEOMetaData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(256)")
-                        .HasDefaultValue("")
-                        .HasColumnName("description");
-
-                    b.Property<string>("KeyWords")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("keywords");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int")
-                        .HasColumnName("post_id");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("title");
-
-                    b.Property<string>("UrlSlug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasColumnName("url_slug");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("SEOMetaDatas", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Tag", b =>
@@ -886,55 +738,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("PaymentMethod");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.Post", b =>
-                {
-                    b.HasOne("DataAccessLayer.Entities.Employee", "Author")
-                        .WithMany("Posts")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLayer.Entities.PostType", "PostType")
-                        .WithMany("Posts")
-                        .HasForeignKey("PostTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("PostType");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.PostTag", b =>
-                {
-                    b.HasOne("DataAccessLayer.Entities.Post", "Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLayer.Entities.Tag", "Tag")
-                        .WithMany("PostTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.SEOMetaData", b =>
-                {
-                    b.HasOne("DataAccessLayer.Entities.Post", "Post")
-                        .WithMany("MetaDatas")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.TripBooking", b =>
                 {
                     b.HasOne("DataAccessLayer.Entities.Booking", "Booking")
@@ -1033,8 +836,6 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Entities.Employee", b =>
                 {
                     b.Navigation("Bookings");
-
-                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Payment", b =>
@@ -1047,26 +848,9 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("PaymentTransctions");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Entities.Post", b =>
-                {
-                    b.Navigation("MetaDatas");
-
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.PostType", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Entities.Region", b =>
                 {
                     b.Navigation("TripPlans");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Entities.Tag", b =>
-                {
-                    b.Navigation("PostTags");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Trip", b =>

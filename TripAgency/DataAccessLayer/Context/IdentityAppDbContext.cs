@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Context
 {
-    public class Identity(DbContextOptions<Identity> op) : IdentityDbContext(op)
+    public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> op) : IdentityDbContext(op)
     {
         public virtual ICollection<IdentityUserClaim<long>> Claims { get; set; } = null!;
         public virtual ICollection<IdentityUserLogin<long>> Logins { get; set; } = null!;
         public virtual ICollection<IdentityUserToken<long>> Tokens { get; set; } = null!;
         public virtual ICollection<IdentityRole<long>> AspNetRoles { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; }
+        public virtual ICollection<IdentityUser<long>> IdentityUsers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

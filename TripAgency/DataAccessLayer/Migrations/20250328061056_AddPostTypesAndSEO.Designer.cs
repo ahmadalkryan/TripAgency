@@ -4,6 +4,7 @@ using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328061056_AddPostTypesAndSEO")]
+    partial class AddPostTypesAndSEO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,7 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BookingType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("CustomerId")
@@ -53,7 +57,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 13, 48, 67, DateTimeKind.Local).AddTicks(8536))
+                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 10, 55, 979, DateTimeKind.Local).AddTicks(3874))
                         .HasColumnName("start_date_time");
 
                     b.Property<string>("Status")
@@ -453,7 +457,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("PublishDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2(7)")
-                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 13, 48, 74, DateTimeKind.Local).AddTicks(1433))
+                        .HasDefaultValue(new DateTime(2025, 3, 28, 9, 10, 55, 985, DateTimeKind.Local).AddTicks(6239))
                         .HasColumnName("publish_date");
 
                     b.Property<string>("Slug")
@@ -467,6 +471,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnName("status");
 
                     b.Property<string>("Summary")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("sammary");
 

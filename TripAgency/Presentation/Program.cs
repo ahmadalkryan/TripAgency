@@ -2,9 +2,11 @@ using DataAccessLayer.Context;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
-builder.Services.AddDbContext<Identity>(options =>
+builder.Services.AddDbContext<IdentityAppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"))
     );
 
@@ -31,7 +33,7 @@ builder.Services.AddDbContext<Identity>(options =>
 //    options.Password.RequireDigit = true;
 //    options.Password.RequireNonAlphanumeric = true;
 //})
-//.AddEntityFrameworkStores<Identity>()
+//.AddEntityFrameworkStores<IdentityAppDbContext>()
 //.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 var app = builder.Build();
