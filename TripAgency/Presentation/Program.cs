@@ -1,7 +1,9 @@
 
 using Application.IReositosy;
+using Application.IUnitOfWork;
 using DataAccessLayer.Context;
 using Infrastructure.Repository;
+using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -39,6 +41,8 @@ builder.Services.AddDbContext<IdentityAppDbContext>(options =>
 //.AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+builder.Services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+
 
 
 var app = builder.Build();
