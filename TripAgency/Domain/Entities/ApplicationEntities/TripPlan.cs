@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Entities
+namespace Domain.Entities.ApplicationEntities
 {
     public class TripPlan : BaseEntity
     {
@@ -20,9 +20,9 @@ namespace DataAccessLayer.Entities
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public decimal Duration { get; set; }
-        public string IndudedServices { get; set; }  = string.Empty;
+        public string IndudedServices { get; set; } = string.Empty;
         public string Stops { get; set; } = string.Empty;
-        public string MealsPlan {  get; set; } = string.Empty;
+        public string MealsPlan { get; set; } = string.Empty;
         public string HotelsStays { get; set; } = string.Empty;
         public virtual Region? Region { get; set; }
         public virtual Trip? Trip { get; set; }

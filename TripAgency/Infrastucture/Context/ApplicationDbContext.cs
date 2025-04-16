@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices.Marshalling;
 using DataAccessLayer.Enum;
+using Domain.Entities.ApplicationEntities;
 
 namespace DataAccessLayer.Context
 {

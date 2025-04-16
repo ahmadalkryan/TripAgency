@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities;
+using Domain.Entities.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Context
 {
-    public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> op) : IdentityDbContext(op)
+    public class IdentityAppDbContext(DbContextOptions<IdentityAppDbContext> op) : IdentityDbContext<ApplicationUser, ApplicationRole, long>(op)
     {
         public virtual ICollection<IdentityUserClaim<long>> Claims { get; set; } = null!;
         public virtual ICollection<IdentityUserLogin<long>> Logins { get; set; } = null!;
         public virtual ICollection<IdentityUserToken<long>> Tokens { get; set; } = null!;
-        public virtual ICollection<IdentityRole<long>> AspNetRoles { get; set; } = null!;
-        public virtual ICollection<IdentityUser<long>> IdentityUsers { get; set; } = null!;
+        public virtual DbSet<ApplicationRole> AspNetRoles { get; set; }
+        public override DbSet<ApplicationUser> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

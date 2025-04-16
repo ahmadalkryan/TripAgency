@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Entities
+namespace Domain.Entities.ApplicationEntities
 {
-    public class PostType : BaseEntity
+    public class SEOMetaData : BaseEntity
     {
-        public PostType()
-        {
-            Posts = new HashSet<Post>();
-        }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public string? KeyWords { get; set; }
+        public string? UrlSlug { get; set; }
+        public int PostId { get; set; }
+        public Post? Post { get; set; }
     }
 }

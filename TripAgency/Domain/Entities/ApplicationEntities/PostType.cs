@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities.Common;
+using Domain.Entities.ApplicationEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Entities
 {
-    public class SEOMetaData : BaseEntity
+    public class PostType : BaseEntity
     {
+        public PostType()
+        {
+            Posts = new HashSet<Post>();
+        }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public string?  KeyWords { get; set; }
-        public string? UrlSlug { get; set; }
-        public int PostId { get; set; }
-        public Post? Post { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }
