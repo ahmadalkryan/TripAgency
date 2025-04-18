@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace BlazorPresentation.Controllers
 {
-    [Route("/[Controller]/[Action]")]
+    //[Route("/[Controller]/[Action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
