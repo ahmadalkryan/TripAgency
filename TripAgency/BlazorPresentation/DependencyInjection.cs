@@ -17,10 +17,9 @@ namespace Presentation
         {
             services.AddEndpointsApiExplorer();
             services.AddControllers();
+            services.AddMvc();
             services.AddEndpointsApiExplorer();
             services.AddControllersWithViews();
-
-
             return services;
         }
     }

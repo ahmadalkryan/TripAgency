@@ -11,7 +11,8 @@ namespace Application.IApplicationServices.Authentication
     public interface IAuthenticationService
     {
         Task<IdentityResult> RegisterAsync(RegisterDto dto);
-        Task<SignInResult> LoginAsync(LoginDto loginDto);
+        Task<UserProfileDto> LoginAsync(LoginDto loginDto);
+        Task<UserProfileDto> GetAuthenticatedUser();
         Task LogoutAsync();
     }
 }

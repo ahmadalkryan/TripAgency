@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Enum
+namespace Application.DTOs.Customer
 {
-    public enum RoleEnum
+    public class CreateCustomerDto
     {
-        Admin ,
-        Employee,
-        Customer,
-        Authenticated,
     }
 }

@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Enum
+namespace Application.DTOs.Employee
 {
-    public enum RoleEnum
+    public class UpdateEmployeeDto
     {
-        Admin ,
-        Employee,
-        Customer,
-        Authenticated,
     }
 }

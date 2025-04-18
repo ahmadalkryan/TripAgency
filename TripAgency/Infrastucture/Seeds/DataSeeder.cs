@@ -33,15 +33,36 @@ namespace Infrastructure.Seeds
                 shouldUpdateContext = false;
                 _context.SaveChanges();
             }
+            if(!_identityAppDbContext.Roles.Any())
+            {
+                shouldUpdateContext = true;
 
-            if (!_identityAppDbContext.Users.Any(u => u.Email == DefaultSetting.DefaultAdminOne))
+                var roleUser = new ApplicationRole()
+                {
+                    Name = DefaultSetting.UserRoleName,
+                };
+                var roleEmployee = new ApplicationRole()
+                {
+                    Name = DefaultSetting.EmployeeRoleName,
+                };
+                var roleAdmin = new ApplicationRole()
+                {
+                    Name = DefaultSetting.AdminRoleName
+                };
+                _roleManeger.CreateAsync(roleAdmin).GetAwaiter().GetResult();
+                _roleManeger.CreateAsync(roleUser).GetAwaiter().GetResult();
+                _roleManeger.CreateAsync(roleEmployee).GetAwaiter().GetResult();
+            }
+
+            if (!_identityAppDbContext.Users.Any(u => u.Email == DefaultSetting.DefaultAdminOneEmail))
             {
                 var newUser = new ApplicationUser()
                 {
-                    Email = DefaultSetting.DefaultAdminOne,
-                    UserName = DefaultSetting.DefaultAdminOne,
+                    Email = DefaultSetting.DefaultAdminOneEmail,
+                    UserName = DefaultSetting.AdminRoleName,
                     PhoneNumber = DefaultSetting.DefaultAdminOnePhone,
-                    PhoneNumberConfirmed = true
+                    PhoneNumberConfirmed = true,
+                    IsActive = true
                 };
 
                 var isCreated = _userManager.CreateAsync(newUser, DefaultSetting.DefaultAdminPassword).GetAwaiter().GetResult();
@@ -50,46 +71,11 @@ namespace Infrastructure.Seeds
                     _userManager.AddToRoleAsync(newUser, DefaultSetting.AdminRoleName).GetAwaiter().GetResult();
                     var code = _userManager.GenerateEmailConfirmationTokenAsync(newUser).GetAwaiter().GetResult();
                     _userManager.ConfirmEmailAsync(newUser, code).GetAwaiter().GetResult();
-
                 }
-            }
-            if (!_identityAppDbContext.Users.Any(u => u.Email == DefaultSetting.DefaultPublicRelationAccount))
-            {
-                var newUser = new ApplicationUser()
-                {
-                    Email = DefaultSetting.DefaultPublicRelationAccount,
-                    UserName = DefaultSetting.DefaultPublicRelationAccount,
-                    PhoneNumber = DefaultSetting.DefaultPublicRelationPhone,
-                    PhoneNumberConfirmed = true
-                };
+                shouldUpdateContext = true;
 
-                var isCreated = _userManager.CreateAsync(newUser, DefaultSetting.DefaultPublicRelationPassword).GetAwaiter().GetResult();
-                if (isCreated.Succeeded)
-                {
-                    _userManager.AddToRoleAsync(newUser, DefaultSetting.PublicRelationRoleName).GetAwaiter().GetResult();
-                    var code = _userManager.GenerateEmailConfirmationTokenAsync(newUser).GetAwaiter().GetResult();
-                    _userManager.ConfirmEmailAsync(newUser, code).GetAwaiter().GetResult();
-
-                }
             }
-            if (!_identityAppDbContext.Users.Any(u => u.PhoneNumber == DefaultSetting.DefaultEmployeePhone))
-            {
-                var newUser = new ApplicationUser()
-                {
-                    Email = DefaultSetting.DefaultEmployeePhone,
-                    UserName = DefaultSetting.DefaultEmployeePhone,
-                    PhoneNumber = DefaultSetting.DefaultEmployeePhone,
-                    PhoneNumberConfirmed = true
-                };
 
-                var isCreated = _userManager.CreateAsync(newUser, DefaultSetting.DefaultPublicRelationPassword).GetAwaiter().GetResult();
-                if (isCreated.Succeeded)
-                {
-                    _userManager.AddToRoleAsync(newUser, DefaultSetting.EmployeeRoleName).GetAwaiter().GetResult();
-                    var code = _userManager.GenerateEmailConfirmationTokenAsync(newUser).GetAwaiter().GetResult();
-                    _userManager.ConfirmEmailAsync(newUser, code).GetAwaiter().GetResult();
-                }
-            }
 
             if (shouldUpdateContext)
             {

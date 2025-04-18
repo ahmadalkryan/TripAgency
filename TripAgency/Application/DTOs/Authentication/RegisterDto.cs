@@ -4,30 +4,25 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Application.DTOs.Authentication
 {
     public class RegisterDto
-    {
-        
-        public string FullName => $"{FirstName} {LastName}";
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+    {        
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
         [Required]
         [EmailAddress]
         public string? Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        public string? Password { get; set; }
-
+        public string Password { get; set; } = string.Empty;
         [Required]
-        public RoleEnum Role { get; set; }
-
-        
-        public int Age { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))] // Add this for proper enum handling
+        public RoleEnum Role { get; set; } = RoleEnum.Customer;
         public string Address { get; set; } = string.Empty;
     }
-
 }

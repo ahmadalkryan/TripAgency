@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Authentication Options";
+}
+
+@model Application.DTOs.Authentication.UserProfileDto
+
+@if (Model is null)
+{
+    <div class="auth-options-container">
+        <h2>Choose Authentication Method</h2>
+
+        <div class="options">
+            <a asp-action="Login" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+
+            <a asp-action="Register" class="btn btn-success btn-lg">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome @Model.Name</h1>
+        <h1 class="display-4">Your @Model.Email</h1>
+        <h1 class="display-4">@Model.Id</h1>
+        <h1 class="display-4">JWTTOKEN Is : @Model.Token!.Token</h1>
+
+    </div>
+}
+
+<style>
+    .auth-options-container {
+        text-align: center;
+        padding: 50px;
+    }
+
+    .options {
+        margin-top: 30px;
+    }
+
+    .btn-lg {
+        width: 200px;
+        margin: 10px;
+        padding: 20px;
+        font-size: 1.2em;
+    }
+</style>

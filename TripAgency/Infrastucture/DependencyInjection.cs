@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Security.Claims;
 using Infrastructure.Seeds;
+using Application.IApplicationServices.Authentication;
+using Infrastructure.ApplicationServices.Authentication;
+using Application.IApplicationServices.Contact;
+using Infrastructure.Services.ServicesImplementation;
 
 
 namespace Infrastructure
@@ -29,9 +33,16 @@ namespace Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
+            services.AddScoped(typeof(IIdentityAppRepository<>), typeof(IdentityRepository<>));
+
+
+
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<DataSeeder>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IContactTypeService, ContactTypeService>();
+
 
 
             return services;

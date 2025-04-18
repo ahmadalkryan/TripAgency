@@ -4,6 +4,7 @@ using DataAccessLayer.Context;
 using Domain.Entities.IdentityEntities;
 using Infrastructure;
 using Infrastructure.Repository;
+using Infrastructure.Seeds;
 using Presentation;
 
 public class Startup(IConfiguration configuration)
@@ -18,8 +19,10 @@ public class Startup(IConfiguration configuration)
     }
 
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder dataSeeder)
     {
+        dataSeeder.SeedDataAsync();
+
         if (env.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
