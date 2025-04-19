@@ -49,9 +49,15 @@ namespace Infrastructure.Seeds
                 {
                     Name = DefaultSetting.AdminRoleName
                 };
+                var roleCustomer = new ApplicationRole()
+                {
+                    Name = DefaultSetting.CustomerRoleName
+                };
                 _roleManeger.CreateAsync(roleAdmin).GetAwaiter().GetResult();
                 _roleManeger.CreateAsync(roleUser).GetAwaiter().GetResult();
                 _roleManeger.CreateAsync(roleEmployee).GetAwaiter().GetResult();
+                _roleManeger.CreateAsync(roleCustomer).GetAwaiter().GetResult();
+
             }
 
             if (!_identityAppDbContext.Users.Any(u => u.Email == DefaultSetting.DefaultAdminOneEmail))
