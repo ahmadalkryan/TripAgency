@@ -20,6 +20,8 @@ namespace Presentation
             services.AddMvc();
             services.AddEndpointsApiExplorer();
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }

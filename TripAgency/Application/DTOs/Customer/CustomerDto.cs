@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.Common;
+using Application.DTOs.Contact;
+using Domain.Entities.ApplicationEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,9 @@ namespace Application.DTOs.Customer
 {
     public class CustomerDto : BaseDto<long>
     {
+        public string Name { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public required ContactsDto Contacts { get; set; }
     }
 
     public class CustomersDto

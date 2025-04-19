@@ -31,7 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="ContactType" asp-action="Index">ContactType</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customer</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -42,9 +44,9 @@
             @RenderBody()
     </div>
 
-    <footer class="bg-dark text-white text-center py-3 mt-4">
+    <footer class="bg-dark text-white text-center py-3 mt-5">
         <div class="container">
-            &copy; @DateTime.Now.Year - Session_6 - Emad Kerhily
+            &copy; @DateTime.Now.Year - ALOOHA
             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>

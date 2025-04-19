@@ -9,6 +9,7 @@ namespace Domain.Common
     public class DefaultSetting
     {
         public const string UserRoleName = "User";
+        public const string CustomerRoleName = "Customer";
         public const string EmployeeRoleName = "Employee";
         public const string AdminRoleName = "Admin";
         public const string DefaultAdminOneUserName = "ALOOHA";

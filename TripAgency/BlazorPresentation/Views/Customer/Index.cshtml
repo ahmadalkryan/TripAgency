@@ -1,0 +1,30 @@
+﻿@model Application.DTOs.Customer.CustomersDto
+
+<h2>Customers</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>@customer.Name</td>
+                <td>@customer.Country</td>
+                <td>
+                    <a asp-action="UpdateCustomer" asp-route-id="@customer.Id">Edit</a>
+                    <form asp-action="DeleteCustomer" asp-route-id="@customer.Id" method="post" style="display:inline">
+                        <button type="submit" class="btn btn-link">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New Customer</a>

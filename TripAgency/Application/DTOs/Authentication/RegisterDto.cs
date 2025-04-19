@@ -10,8 +10,13 @@ using System.Threading.Tasks;
 namespace Application.DTOs.Authentication
 {
     public class RegisterDto
-    {        
+    {
+        [Required]
+        [Display(Name = "First Name")]
         public required string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
         public required string LastName { get; set; }
         [Required]
         [EmailAddress]
@@ -19,7 +24,14 @@ namespace Application.DTOs.Authentication
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+        [Display(Name = "Password")]
+        [StringLength(100, ErrorMessage = "Password must be at least 6 characters long.", MinimumLength = 6)]
+        public required string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public required string ConfirmPassword { get; set; }
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))] // Add this for proper enum handling
         public RoleEnum Role { get; set; } = RoleEnum.Customer;

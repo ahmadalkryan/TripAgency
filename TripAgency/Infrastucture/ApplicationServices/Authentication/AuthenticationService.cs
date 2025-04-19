@@ -4,7 +4,10 @@ using Application.IReositosy;
 using Domain.Common;
 using Domain.Entities.ApplicationEntities;
 using Domain.Entities.IdentityEntities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -17,17 +20,19 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.ApplicationServices.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService : Application.IApplicationServices.Authentication.IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityAppRepository<ApplicationUser> _userRepository;
         private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
         public AuthenticationService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration config,
             IIdentityAppRepository<ApplicationUser> identityAppRepository)
         {
@@ -35,12 +40,46 @@ namespace Infrastructure.ApplicationServices.Authentication
             _signInManager = signInManager;
             _config = config;
             _userRepository = identityAppRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public Task<UserProfileDto> GetAuthenticatedUser()
+        public async Task<UserProfileDto> GetAuthenticatedUser()
         {
-            throw new NotImplementedException();
+            if (_httpContextAccessor.HttpContext == null)
+                throw new Exception("User Not found");
+
+            var authenticateResult = await _httpContextAccessor.HttpContext.AuthenticateAsync();   
+            if (!authenticateResult.Succeeded)
+                throw new Exception("User Not found");
+
+            ApplicationUser? customer = null;
+            var identifierClaim = authenticateResult.Principal.FindFirst(claim => claim.Type == ClaimTypes.NameIdentifier);
+
+            if (identifierClaim != null && int.TryParse(identifierClaim.Value, out int customerId))
+            {
+                customer = await _userManager.FindByIdAsync(customerId.ToString());                
+            }
+
+            if (customer is null)
+            {
+                throw new Exception("User Not found");                
+            }
+
+            if (!customer.IsActive)
+            {
+                throw new Exception("Deactivated User");                
+            }
+
+            var jwtToken = await GenerateJwtToken(customer);
+            return new UserProfileDto
+            {
+                Id = customer.Id,
+                Name = customer.UserName ?? string.Empty,
+                Email = customer.Email ?? string.Empty,
+                Token = jwtToken,
+            };
         }
+        
 
         public async Task<UserProfileDto> LoginAsync(LoginDto loginDto)
         {
@@ -56,16 +95,14 @@ namespace Infrastructure.ApplicationServices.Authentication
                 throw new Exception("Deactivated User");
              await _signInManager.SignInAsync(existingUser, false);
 
-                var jwtToken = await GenerateJwtToken(existingUser);
-                return new UserProfileDto
-                {
-                    Id = existingUser.Id,
-                    Name = existingUser.UserName ?? string.Empty,
-                    Email = existingUser.Email ?? string.Empty,
-                    Token = jwtToken,
-                };
-            
-            
+            var jwtToken = await GenerateJwtToken(existingUser);
+            return new UserProfileDto
+            {
+                Id = existingUser.Id,
+                Name = existingUser.UserName ?? string.Empty,
+                Email = existingUser.Email ?? string.Empty,
+                Token = jwtToken,
+            };            
         }
 
         public async Task LogoutAsync()

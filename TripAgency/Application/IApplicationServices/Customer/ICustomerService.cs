@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Common;
+using Application.DTOs.Contact;
 using Application.DTOs.Customer;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,12 @@ namespace Application.IApplicationServices.Customer
 {
     public interface ICustomerService
     {
-        Task<CustomersDto> GetCustomers();
-        Task<CustomerDto> CreateCustomer(CreateCustomerDto createCustomerDto);
-        Task<CustomerDto> UpdateCustomer(UpdateCustomerDto updateCustomerDto);
-        Task DeleteCustomer(BaseDto<long> dto);
+        Task<CustomersDto> GetCustomersAsync();
+        Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto);
+        Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto);
+        Task DeleteCustomerAsync(BaseDto<long> dto);
+        Task<ContactsDto> GetCustomerContactAsync();
+        Task<CustomerDto> UpdateCustomerContactsAsync();
+        Task<CustomerDto> DeleteCustomerContactAsync();
     }
 }

@@ -642,6 +642,8 @@ namespace DataAccessLayer.Context
 
                 c.Property(c => c.CustomerId)
                 .HasColumnName("customer_id");
+
+                c.HasIndex(c => new { c.Value, c.CustomerId, c.ContactTypeId }).IsUnique();
             });
             #endregion
 

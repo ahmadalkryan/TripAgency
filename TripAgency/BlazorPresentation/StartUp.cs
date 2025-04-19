@@ -34,6 +34,7 @@ public class Startup(IConfiguration configuration)
         app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseHttpsRedirection();
 
         // Authentication/Authorization Middleware
         app.UseAuthentication();

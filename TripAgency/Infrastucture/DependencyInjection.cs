@@ -15,6 +15,8 @@ using Application.IApplicationServices.Authentication;
 using Infrastructure.ApplicationServices.Authentication;
 using Application.IApplicationServices.Contact;
 using Infrastructure.Services.ServicesImplementation;
+using Application.IApplicationServices.Customer;
+using Infrastructure.ApplicationServices.Customer;
 
 
 namespace Infrastructure
@@ -34,17 +36,15 @@ namespace Infrastructure
         {
             services.AddScoped(typeof(IAppRepository<>), typeof(AppRepository<>));
             services.AddScoped(typeof(IIdentityAppRepository<>), typeof(IdentityRepository<>));
+            services.AddScoped<DataSeeder>();
 
 
 
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<DataSeeder>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IContactTypeService, ContactTypeService>();
-
-
-
+            services.AddScoped<ICustomerService, CustomerService>();
             return services;
         }
 
