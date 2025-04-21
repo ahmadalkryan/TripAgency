@@ -5,32 +5,41 @@
     ViewData["Title"] = "Edit Contact Type";
 }
 
-<div class="w-100 card border-0 p-4">
-    <div class="card-header bg-success bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="text-white py-2">Edit Contact Type</h1>
-            </div>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white py-3">
+            <h3 class="mb-0 text-center">
+                <i class="fas fa-edit me-2"></i>Edit Contact Type
+            </h3>
         </div>
-    </div>
-    <div class="card-body border p-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="mb-3">
-                <label asp-for="Type" class="form-label"></label>
-                <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<ContactTypeEnum>()">
-                </select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a asp-controller="ContactType" asp-action="Index" class="btn btn-secondary">Back to List</a>
-        </form>
+
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-4">
+                    <label asp-for="Type" class="form-label fw-bold"></label>
+                    <select asp-for="Type" class="form-select"
+                            asp-items="Html.GetEnumSelectList<ContactTypeEnum>()">
+                        <option value="">-- Select Type --</option>
+                    </select>
+                    <span asp-validation-for="Type" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save me-2"></i>Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

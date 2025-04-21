@@ -11,6 +11,6 @@ namespace Application.IApplicationServices.Contact
         Task UpdateContactAsync(UpdateContactTypeDto updateAddressDto);
         Task DeleteContactAsync(BaseDto<int> baseDto);
         Task<ContactTypesDto> GetContactTypesAsync();
-        Task<ContactType> GetContactTypeByIdAsync(int id);
+        Task<ContactTypeDto> GetContactTypeByIdAsync(int id);
     }
 }

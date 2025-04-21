@@ -4,47 +4,57 @@
 
 @model Application.DTOs.Authentication.UserProfileDto
 
-@if (Model is null)
-{
-    <div class="auth-options-container">
-        <h2>Choose Authentication Method</h2>
+<div class="container py-5">
+    @if (Model is null)
+    {
+    <div class="text-center">
+        <h2 class="mb-4">
+            <i class="fas fa-user-lock me-2"></i>Welcome, Please Authenticate
+        </h2>
 
-        <div class="options">
-            <a asp-action="Login" class="btn btn-primary btn-lg">
-                <i class="fas fa-sign-in-alt"></i> Login
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a asp-action="Login" class="btn btn-primary px-4 py-2">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
             </a>
 
-            <a asp-action="Register" class="btn btn-success btn-lg">
-                <i class="fas fa-user-plus"></i> Register
+            <a asp-action="Register" class="btn btn-success px-4 py-2">
+                <i class="fas fa-user-plus me-2"></i>Register
             </a>
         </div>
     </div>
-}
-else
-{
-    <div class="text-center">
-        <h1 class="display-4">Welcome @Model.Name</h1>
-        <h1 class="display-4">Your @Model.Email</h1>
-        <h1 class="display-4">@Model.Id</h1>
-        <h1 class="display-4">JWTTOKEN Is : @Model.Token!.Token</h1>
+    }
+    else
+    {
+    <div class="text-center p-4 bg-light rounded">
+        <div class="mb-3">
+            <i class="fas fa-user-circle fa-3x text-primary"></i>
+        </div>
 
+        <h3 class="mb-3">Welcome, <span class="text-primary">@Model.Name</span></h3>
+        <p class="mb-1"><i class="fas fa-envelope me-2"></i>@Model.Email</p>
+        <p class="small text-muted mb-4">User ID: @Model.Id</p>
+
+        <div class="p-3 bg-white rounded">
+            <p class="mb-2">Your Session Token:</p>
+            <code class="d-block text-truncate">@Model.Token!.Token</code>
+        </div>
     </div>
-}
+    }
+</div>
 
 <style>
-    .auth-options-container {
-        text-align: center;
-        padding: 50px;
+    .container {
+        max-width: 600px;
     }
 
-    .options {
-        margin-top: 30px;
+    .btn {
+        min-width: 120px;
     }
 
-    .btn-lg {
-        width: 200px;
-        margin: 10px;
-        padding: 20px;
-        font-size: 1.2em;
+    code {
+        background: #f8f9fa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        color: #d63384;
     }
 </style>

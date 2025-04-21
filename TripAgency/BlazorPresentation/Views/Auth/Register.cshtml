@@ -1,58 +1,90 @@
 ﻿@model Application.DTOs.Authentication.RegisterDto
 @using Domain.Enum
 
-<form asp-action="Register" method="post">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="FirstName" class="form-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="container mt-4" style="max-width: 800px;">
+    <h3 class="text-center mb-4">
+        <i class="fas fa-user-plus me-2"></i>Create Account
+    </h3>
+
+    <form asp-action="Register" method="post" class="border p-4 rounded shadow-sm">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="FirstName" class="form-label fw-bold"></label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="LastName" class="form-label fw-bold"></label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="LastName" class="form-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+
+        <div class="form-group mb-3">
+            <label asp-for="Email" class="form-label fw-bold"></label>
+            <input asp-for="Email" class="form-control" placeholder="example@domain.com" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Password" class="fw-bold"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Create password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword" class="fw-bold"></label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+        <div class="form-group mb-3">
+            <label asp-for="Role" class="form-label fw-bold"></label>
+            <select asp-for="Role" class="form-select" asp-items="Html.GetEnumSelectList<RoleEnum>()">
+                <option value="">-- Select Role --</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger small"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger" />
-    </div>
+        <div class="form-group mb-4">
+            <label asp-for="Address" class="form-label fw-bold"></label>
+            <input asp-for="Address" class="form-control" placeholder="Enter your address" />
+            <span asp-validation-for="Address" class="text-danger small"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" type="password" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger" />
-    </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success py-2">
+                <i class="fas fa-user-check me-2"></i>Register
+            </button>
+        </div>
+    </form>
+</div>
 
-    <div class="form-group">
-        <label asp-for="Role" class="form-label"></label>
-        <select asp-for="Role"
-                class="form-control"
-                asp-items="Html.GetEnumSelectList<RoleEnum>()">
-            <option value="">-- Select Role --</option>
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
-    <div class="form-group">
-        <label asp-for="Address" class="form-label"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
+<style>
+    .form-control, .form-select {
+        padding: 0.5rem 1rem;
+    }
 
-    <button type="submit" class="btn btn-success mt-3">Register</button>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-</form>
+    .form-label {
+        margin-bottom: 0.5rem;
+    }
+
+    .btn {
+        font-weight: 500;
+    }
+</style>
